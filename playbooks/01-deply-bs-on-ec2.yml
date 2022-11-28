@@ -1,0 +1,53 @@
+---
+ - hosts: dev
+   become: true
+   tasks:
+    - name: Apt Update
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+    - name: Apt Upgrade
+      ansible.builtin.apt:
+        upgrade: yes
+    - name: Install Node/NPM
+      ansible.builtin.shell: curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+    - name: Install NodeJS
+      ansible.builtin.apt:
+        name: nodejs
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+    - name: Create a directory for project BS from GitHub
+      ansible.builtin.file:
+        path: /home/ubuntu/bs_application
+        state: directory
+    - name: Clone BS repo from GitHub
+      ansible.builtin.git:
+        repo: 'https://github.com/CREPIC21/businessregistry.git'
+        dest: /home/ubuntu/bs_application
+        clone: yes
+    - name: Copy config.env file with owner and permissions
+      copy:
+        src: /home/danijel/ansible_bs/config.env
+        dest: /home/ubuntu/bs_application/config.env
+        owner: root
+        group: root
+        mode: '0644'
+
+# EXECUTE
+# -- ansible-playbook playbooks/01-deply-bs-on-ec2.yml
+
+### TASKS ###
+# 1. Apt Update
+# 2. Apt Upgrade
+# -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+# 3. Install Node/NPM with curl
+# -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/shell_module.html
+# 4. Install NodeJS
+# 5. Install nginx
+# -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+# 6. Create a directory for project BS from GitHub
+# -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+# 7. Clone BS repo from GitHub
+# -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html
+# 8. Copy file with owner and permissions

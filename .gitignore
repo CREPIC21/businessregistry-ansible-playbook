@@ -1,0 +1,10 @@
+### Environment Variables ###
+config.env
+
+### PEM Keys ###
+aws_keys
+
+### TERRAFORM ###
+aws/.terraform
+aws/terraform.tfstate
+aws/.terraform.lock.hcl
