@@ -73,3 +73,6 @@
 # 11. Start the app
 # 12. Make sure app starts when reboot
 # -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
+# 13. Rename original nginx configuration file
+# -- https://phoenixnap.com/kb/ansible-create-file
+# -- https://www.middlewareinventory.com/blog/ansible-lineinfile-examples/
