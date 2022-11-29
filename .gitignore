@@ -8,3 +8,4 @@ aws_keys
 aws/.terraform
 aws/terraform.tfstate
 aws/.terraform.lock.hcl
+aws/terraform.tfstate.backup

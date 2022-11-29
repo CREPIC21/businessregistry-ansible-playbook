@@ -1,14 +1,12 @@
 ---
  - hosts: dev
-   become: true
+   become: yes
    tasks:
-    - name: Apt Update
-      ansible.builtin.apt:
-        name: "*"
-        state: latest
-    - name: Apt Upgrade
-      ansible.builtin.apt:
+    - name: Update and upgrade apt packages
+      apt:
         upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
     - name: Install Node/NPM
       ansible.builtin.shell: curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
     - name: Install NodeJS
@@ -29,10 +27,27 @@
     - name: Copy config.env file with owner and permissions
       copy:
         src: /home/danijel/ansible_bs/config.env
-        dest: /home/ubuntu/bs_application/config.env
+        dest: /home/ubuntu/bs_application/config/config.env
         owner: root
         group: root
         mode: '0644'
+    - name: Install dependencies
+      npm:
+        path: /home/ubuntu/bs_application/package
+    - name: Setup PM2 process manager to keep the app running
+      npm:
+        name: pm2
+        global: yes
+    - name: Start the app
+      command: pm2 start server.js
+      args:
+        chdir: /home/ubuntu/bs_application
+    - name: Make sure app starts when reboot
+      command: pm2 startup ubuntu
+
+
+
+        
 
 # EXECUTE
 # -- ansible-playbook playbooks/01-deply-bs-on-ec2.yml
@@ -51,3 +66,10 @@
 # 7. Clone BS repo from GitHub
 # -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html
 # 8. Copy file with owner and permissions
+# -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+# 9. Install dependencies
+# 10. Setup PM2 process manager to keep your app running
+# -- https://docs.ansible.com/ansible/2.9/modules/npm_module.html
+# 11. Start the app
+# 12. Make sure app starts when reboot
+# -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
