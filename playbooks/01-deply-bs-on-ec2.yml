@@ -2,48 +2,60 @@
  - hosts: dev
    become: yes
    tasks:
-    - name: Update and upgrade apt packages
-      apt:
-        upgrade: yes
-        update_cache: yes
-        cache_valid_time: 86400
-    - name: Install Node/NPM
-      ansible.builtin.shell: curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-    - name: Install NodeJS
-      ansible.builtin.apt:
-        name: nodejs
-    - name: Install nginx
-      ansible.builtin.apt:
-        name: nginx
-    - name: Create a directory for project BS from GitHub
-      ansible.builtin.file:
-        path: /home/ubuntu/bs_application
-        state: directory
-    - name: Clone BS repo from GitHub
-      ansible.builtin.git:
-        repo: 'https://github.com/CREPIC21/businessregistry.git'
-        dest: /home/ubuntu/bs_application
-        clone: yes
-    - name: Copy config.env file with owner and permissions
-      copy:
-        src: /home/danijel/ansible_bs/config.env
-        dest: /home/ubuntu/bs_application/config/config.env
-        owner: root
-        group: root
-        mode: '0644'
-    - name: Install dependencies
-      npm:
-        path: /home/ubuntu/bs_application/package
-    - name: Setup PM2 process manager to keep the app running
-      npm:
-        name: pm2
-        global: yes
-    - name: Start the app
-      command: pm2 start server.js
-      args:
-        chdir: /home/ubuntu/bs_application
-    - name: Make sure app starts when reboot
-      command: pm2 startup ubuntu
+    # - name: Update and upgrade apt packages
+    #   apt:
+    #     upgrade: yes
+    #     update_cache: yes
+    #     cache_valid_time: 86400
+    # - name: Install Node/NPM
+    #   ansible.builtin.shell: curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+    # - name: Install NodeJS
+    #   ansible.builtin.apt:
+    #     name: nodejs
+    # - name: Install nginx
+    #   ansible.builtin.apt:
+    #     name: nginx
+    # - name: Create a directory for project BS from GitHub
+    #   ansible.builtin.file:
+    #     path: /home/ubuntu/bs_application
+    #     state: directory
+    # - name: Clone BS repo from GitHub
+    #   ansible.builtin.git:
+    #     repo: 'https://github.com/CREPIC21/businessregistry.git'
+    #     dest: /home/ubuntu/bs_application
+    #     clone: yes
+    # - name: Copy config.env file with owner and permissions
+    #   copy:
+    #     src: /home/danijel/ansible_bs/config.env
+    #     dest: /home/ubuntu/bs_application/config/config.env
+    #     owner: root
+    #     group: root
+    #     mode: '0644'
+    # - name: Install dependencies
+    #   npm:
+    #     path: /home/ubuntu/bs_application/package
+    # - name: Setup PM2 process manager to keep the app running
+    #   npm:
+    #     name: pm2
+    #     global: yes
+    # - name: Start the app
+    #   command: pm2 start server.js
+    #   args:
+    #     chdir: /home/ubuntu/bs_application
+    # - name: Make sure app starts when reboot
+    #   command: pm2 startup ubuntu
+    # - name: Rename and move original nginx configuration file
+    #   command: "mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.ORIG"
+    # - name: Create a new nginx configuration file from template
+    #   copy:
+    #     src: /home/danijel/ansible_bs/nginx_setup.txt
+    #     dest: /etc/nginx/sites-available/default
+    # - name: Replace the domain in nginx configuration file with server IP address
+    #   replace:
+    #     path: /etc/nginx/sites-available/default
+    #     regexp: "domain_name www_domain_name"
+    #     replace: "34.236.170.205"
+      
 
 
 
@@ -73,6 +85,13 @@
 # 11. Start the app
 # 12. Make sure app starts when reboot
 # -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
-# 13. Rename original nginx configuration file
+# 13. Rename and move original nginx configuration file
 # -- https://phoenixnap.com/kb/ansible-create-file
 # -- https://www.middlewareinventory.com/blog/ansible-lineinfile-examples/
+# -- http://www.freekb.net/Article?id=490#:~:text=Ansible%20does%20not%20have%20a%20module%20that%20can,stat%20module%20to%20determine%20if%20the%20file%20exists.
+# 14. Create a new nginx configuration file from template
+# -- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+# 15. Replace the domain in nginx configuration file with server IP address
+# -- https://www.linuxtechi.com/replace-strings-lines-with-ansible/
+# 16. Setup ufw firewall, check nginx config and restart nginx - TO BE DONE
+# -- https://docs.ansible.com/ansible/latest/collections/community/general/ufw_module.html
