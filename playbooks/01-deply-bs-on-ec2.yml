@@ -1,5 +1,7 @@
 ---
  - hosts: dev
+   vars:
+     serveripaddress: "{{hostvars[inventory_hostname]['public_ip_address']}}"
    become: yes
    tasks:
     - name: Update and upgrade apt packages
@@ -54,7 +56,7 @@
       replace:
         path: /etc/nginx/sites-available/default
         regexp: "domain_name www_domain_name"
-        replace: "<IP ADDRESS>"
+        replace: "{{ serveripaddress }}"
     - name: Restart nginx
       command: service nginx restart
 
@@ -105,3 +107,4 @@
 
 ## TODO ##
 # - in step 15 add IP address dynamically using ansible variables, for now I need to change the IP manually every time new VM is provisioned
+# -- https://stackoverflow.com/questions/71795614/ansible-take-some-variable-values-from-one-host-and-use-them-in-another-host
