@@ -3,6 +3,7 @@ config.env
 
 ### PEM Keys ###
 aws_keys
+gcp_keys
 
 ### TERRAFORM ###
 aws/.terraform
@@ -10,3 +11,9 @@ aws/terraform.tfstate
 aws/.terraform.lock.hcl
 aws/terraform.tfstate.backup
 aws/.terraform.tfstate.lock.info
+
+gcp/.terraform
+gcp/terraform.tfstate
+gcp/.terraform.lock.hcl
+gcp/terraform.tfstate.backup
+gcp/.terraform.tfstate.lock.info
