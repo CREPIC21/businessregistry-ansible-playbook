@@ -8,6 +8,7 @@ provider "google" {
 resource "google_compute_instance" "vm_instance" {
   name         = "terraform-instance"
   machine_type = "e2-micro"
+  tags         = ["ssh"]
 
   boot_disk {
     initialize_params {
@@ -18,10 +19,26 @@ resource "google_compute_instance" "vm_instance" {
   network_interface {
     # A default network is created for all GCP projects
     network = google_compute_network.vpc_network.self_link
+    # network = "default"
     access_config {
     }
   }
 }
+
+resource "google_compute_firewall" "ssh" {
+  name    = "allow-ssh"
+
+  allow {
+    ports    = ["22"]
+    protocol = "tcp"
+  }
+  direction = "INGRESS"
+  network = google_compute_network.vpc_network.id
+  priority = 1000
+  target_tags = ["ssh"]
+  source_ranges = ["0.0.0.0/0"]
+}
+
 
 resource "google_compute_network" "vpc_network" {
   name                    = "terraform-network"

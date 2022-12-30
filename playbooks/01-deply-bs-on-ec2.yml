@@ -33,6 +33,11 @@
         owner: root
         group: root
         mode: '0644'
+    - name: Replace the domain in cart.js configuration file with server IP address for PayPal functionality
+      replace:
+        path: /home/ubuntu/bs_application/frontend_controllers/cart.js
+        regexp: "https://businessregistry.xyz"
+        replace: "http://{{ serveripaddress }}"
     - name: Install dependencies
       npm:
         path: /home/ubuntu/bs_application/package
@@ -108,3 +113,4 @@
 ## TODO ##
 # - in step 15 add IP address dynamically using ansible variables, for now I need to change the IP manually every time new VM is provisioned
 # -- https://stackoverflow.com/questions/71795614/ansible-take-some-variable-values-from-one-host-and-use-them-in-another-host
+# -- DONE -- #
