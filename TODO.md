@@ -1,0 +1,2 @@
+- create ansible palybook for deploying the app on GCP VM
+- create terraform files for variables, make configuration more dynamic using variables
